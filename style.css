@@ -10,7 +10,7 @@ body {
 #calculator{
     display: flex;
     margin-bottom: 20%;
-    margin-top: 15%;
+    margin-top: 10%;
 }
 
 #shell{
