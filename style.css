@@ -1,7 +1,6 @@
 body {
     margin: 0;
     width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,17 +15,66 @@ body {
 #shell{
     background-color: gray;
     width: 400px;
-    height: 500px;
+    height: 600px;
     border-radius: 10px;
     border:solid black;
     display: flex;
+    align-items: center;
+    flex-direction: column;
     justify-content: center;
 }
 
 #numberShow{
     margin-top: 10%;
+    margin-bottom: 10%;
     width: 320px;
     height: 110px;
     background-color: white;
     border-radius: 7px;
+    border: solid black;
+    display: flex;
+    flex-direction: column;
+    align-items:flex-end;
+}
+#numOld{
+    font-size: 200%;
+    margin-bottom: 4.5%;
+    margin-right: 2%;
+}
+#numNew{
+    font-size: 300%;
+    margin-right: 2%;
+}
+#clear_and_delete{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.cd{
+    border: solid 2px black;
+    padding-left: 63px;
+    padding-right: 63px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin: 12.5px;
+    background-color: white;
+}
+#number_and_signs{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+.num{
+    border: solid 2px black;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    margin-right: 12.5px;
+    margin-left: 12.5px;
+    margin-bottom: 12.5px;
+    background-color: white;
 }
