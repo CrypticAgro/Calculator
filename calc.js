@@ -9,6 +9,7 @@ let numNew = document.getElementById("numNew");
 let numOld = document.getElementById("numOld");
 let equalIncrementor = 0;
 let decimal = document.getElementById("decimal");
+let operatorID = document.getElementsByClassName("operator")
 // calculator functions
 function add(numOne, numTwo){
     let numThree = numOne + numTwo;
@@ -70,6 +71,9 @@ function calculate(){
     decimal.addEventListener("click", calculationGrabber);
     operatorCounter = 0;
     console.log(finalNumObject)
+    for (var i = 0 ; i < operatorID.length; i++){
+        operatorID[i].addEventListener("click", calculationGrabber);
+    }
 }
 
 
@@ -179,12 +183,15 @@ function calculationGrabber(e){
         decimal.removeEventListener("click", calculationGrabber);
     }
 
-    else if(operatorCounter != 0 && e.target.classList.contains('operator') && finalNumObject.numTwo != []){
+    else if(e.target.classList.contains('operator') && finalNumObject.numOperator != ""){
         if(equalIncrementor != 0){
             let holdThisPls = finalNumObject.numOne[0];
             finalNumObject.numOne = holdThisPls;
         }
         holdThisPls = e.target.getAttribute("data-operator");
+        for (var i = 0 ; i < operatorID.length; i++){
+            operatorID[i].removeEventListener("click", calculationGrabber);
+        }
         calculate();
         finalNumObject.numOperator = holdThisPls;
         operatorSwitch += 1;
@@ -195,6 +202,7 @@ function calculationGrabber(e){
         operatorCounter++;
         console.log(operatorCounter);
     }
+
 
     else if(e.target.classList.contains('operator')){
         finalNumObject.numOperator = e.target.getAttribute("data-operator");
