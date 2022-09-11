@@ -1,36 +1,46 @@
 // declares needed global variables
 var numObject = {numOne: [], numTwo: []};
-var stringNumObject = {numOne: [], numTwo: [],  numOperator: []};
-var finalNumObject = {numOne: [], numTwo: [],  numOperator: []};
+var stringNumObject = {numOne: [], numTwo: [],  numOperator: ""};
+var finalNumObject = {numOne: [], numTwo: [],  numOperator: ""};
 let operatorSwitch = 0;
+let operatorCounter = 0;
 let decimalSwitch = 0;
 let numNew = document.getElementById("numNew");
 let numOld = document.getElementById("numOld");
-
+let equalIncrementor = 0;
+let decimal = document.getElementById("decimal");
 // calculator functions
 function add(numOne, numTwo){
-    return numOne + numTwo;
+    let numThree = numOne + numTwo;
+    let endResult = parseFloat(numThree.toFixed(3))
+    return endResult;
 }
 
 function subtract(numOne, numTwo){
-    return numOne - numTwo;
+    let numThree = numOne - numTwo;
+    let endResult = parseFloat(numThree.toFixed(3))
+    return endResult;
 }
 
 function multiply(numOne, numTwo){
-    return numOne * numTwo;
+    let numThree = numOne * numTwo;
+    let endResult = parseFloat(numThree.toFixed(3))
+    return endResult;
 }
 
 function divide(numOne, numTwo){
-    return numOne/numTwo;
+    let numThree = numOne/numTwo;
+    let endResult = parseFloat(numThree.toFixed(3))
+    return endResult;
 }
 
 // calculates and submits end result
 function calculate(){
+    console.log(finalNumObject)
     let finalResult = 0;
     numOne = finalNumObject.numOne;
     numTwo = finalNumObject.numTwo;
     operation = finalNumObject.numOperator;
-    numNew.replaceChildren();
     switch(operation){
         case "+":
             finalResult = add(numOne, numTwo);
@@ -48,15 +58,20 @@ function calculate(){
     numNew.innerText = finalResult;
     numOld.innerText = finalNumObject.numOne + " " + finalNumObject.numOperator + " " + finalNumObject.numTwo;
     finalNumObject.numOne = [finalResult];
-    finalNumObject.numOperator = [];
+    finalNumObject.numOperator = "";
     finalNumObject.numTwo = [];
     stringNumObject.numOne = [finalResult];
-    stringNumObject.numOperator = [];
+    stringNumObject.numOperator = "";
     stringNumObject.numTwo = [];
     numObject.numOne = [finalResult];
     numObject.numTwo = [];
-    console.log(operatorSwitch)
+    operatorSwitch = 0;
+    equalIncrementor++;
+    decimal.addEventListener("click", calculationGrabber);
+    operatorCounter = 0;
+    console.log(finalNumObject)
 }
+
 
  //hover effect and gives to calculationGetter function
 
@@ -99,16 +114,17 @@ for (var i = 0 ; i < cdContainers.length; i++) {
         e.stopPropagation();
     }); 
     cdContainers[i].addEventListener('click',() => {
-        numObject.numOne = []
-        numObject.numTwo = []
-        numObject.numOperator = []
-        finalNumObject.numOne = []
-        finalNumObject.numTwo = []
-        finalNumObject.numOperator = []
+        numObject = {numOne: [], numTwo: []};
+        stringNumObject = {numOne: [], numTwo: [],  numOperator: ""};
+        finalNumObject = {numOne: [], numTwo: [],  numOperator: ""};
         numNew.innerText = "";
         numOld.innerText = "";
         operatorSwitch = 0;
         decimalSwitch = 0;
+        operatorCounter = 0;
+        equalIncrementor = 0;
+        decimal.addEventListener("click", calculationGrabber);
+
     })
  }
 
@@ -160,24 +176,47 @@ function showNumTwoDecimal(e){
 function calculationGrabber(e){
     if(e.target.id == 'decimal'){
         decimalSwitch += 1;
+        decimal.removeEventListener("click", calculationGrabber);
     }
-    else if(decimalSwitch != 0 && e.target.id == 'decimal'){
 
+    else if(operatorCounter != 0 && e.target.classList.contains('operator') && finalNumObject.numTwo != []){
+        if(equalIncrementor != 0){
+            let holdThisPls = finalNumObject.numOne[0];
+            finalNumObject.numOne = holdThisPls;
+        }
+        holdThisPls = e.target.getAttribute("data-operator");
+        calculate();
+        finalNumObject.numOperator = holdThisPls;
+        operatorSwitch += 1;
+        decimalSwitch = 0;
+        numNewToOld = numNew.innerText;
+        numOld.innerText = numNewToOld + " " + finalNumObject.numOperator;
+        decimal.addEventListener("click", calculationGrabber);
+        operatorCounter++;
+        console.log(operatorCounter);
     }
+
     else if(e.target.classList.contains('operator')){
         finalNumObject.numOperator = e.target.getAttribute("data-operator");
         operatorSwitch += 1;
         decimalSwitch = 0;
-    }
-    else if(e.target.id == 'equal'){
         numNewToOld = numNew.innerText;
         numNew.innerText = "";
+        numOld.innerText = numNewToOld + " " + finalNumObject.numOperator;
+        decimal.addEventListener("click", calculationGrabber);
+        operatorCounter++;
+        console.log(operatorCounter);
+    }
+
+    else if(e.target.id == 'equal'){
         calculate();
     }
     switch(operatorSwitch){
         case 0:
             let placeholder1 = e.target.getAttribute("data-number");
-            if(!placeholder1){placeholder1 = ""}
+            if(!placeholder1){
+            placeholder1 = ""
+            }
             else{
             numObject.numOne.push(placeholder1);
             
@@ -196,9 +235,6 @@ function calculationGrabber(e){
             if(!placeholder2)
             {placeholder2 = ""}
             else{
-            numNewToOld = numNew.innerText;
-            numNew.innerText = "";
-            numOld.innerText = numNewToOld + " " + finalNumObject.numOperator;
             numObject.numTwo.push(placeholder2);
             
             switch(decimalSwitch){
